@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Valentine's Day 💌</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --burgundy:   #6b1a2a;
+      --deep-red:   #8b1e30;
+      --gold:       #c9973a;
+      --gold-light: #e8c47a;
+      --cream:      #fdf6ec;
+      --cream-dark: #f5e9d4;
+      --shadow:     rgba(60, 10, 20, 0.4);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 30% 20%, #3a0a14 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 80%, #2a0a1e 0%, transparent 55%),
+        linear-gradient(135deg, #1a0508 0%, #2e0d18 50%, #1a0810 100%);
+      font-family: 'Cormorant Garamond', serif;
+      overflow: hidden;
+    }
+
+    /* Floating sparkles */
+    .petal {
+      position: fixed;
+      top: -30px;
+      animation: fall linear infinite;
+      opacity: 0;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg);       opacity: 0; }
+      10%  { opacity: 0.75; }
+      90%  { opacity: 0.35; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── SCENE wrapper ── tall so card has room above envelope */
+    .scene {
+      position: relative;
+      width: 380px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;   /* envelope anchored at bottom */
+      cursor: pointer;
+      perspective: 1400px;
+    }
+
+    /* ── CARD ── initially tucked inside, slides fully above on open ── */
+    .card {
+      position: absolute;
+      /* card bottom aligns with top of envelope body */
+      bottom: 240px;
+      left: 50%;
+      transform: translateX(-50%) translateY(220px); /* hidden inside */
+      width: 300px;
+      background: linear-gradient(160deg, var(--cream) 0%, var(--cream-dark) 100%);
+      border-radius: 12px;
+      border: 1.5px solid var(--gold);
+      box-shadow:
+        0 0 0 1px rgba(201,151,58,0.15),
+        0 20px 56px var(--shadow),
+        inset 0 0 40px rgba(201,151,58,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px 34px;
+      z-index: 4;
+      opacity: 0;
+      transition:
+        transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.25s,
+        opacity   0.55s ease                           0.25s;
+      pointer-events: none;
+    }
+
+    /* Top & bottom gold rule lines */
+    .card::before, .card::after {
+      content: '';
+      position: absolute;
+      left: 22px; right: 22px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .card::before { top: 20px; }
+    .card::after  { bottom: 20px; }
+
+    .card-heart {
+      font-size: 2.8rem;
+      margin-bottom: 14px;
+      animation: heartbeat 1.6s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(201,151,58,0.45));
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      15%     { transform: scale(1.22); }
+      30%     { transform: scale(1); }
+      45%     { transform: scale(1.13); }
+    }
+
+    .card h1 {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 2.3rem;
+      color: var(--burgundy);
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      font-style: italic;
+      font-size: 1rem;
+      color: #4a1a28;
+      text-align: center;
+      line-height: 1.9;
+    }
+
+    .divider {
+      width: 64px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 14px auto;
+    }
+
+    .signature {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 1.55rem;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    /* Corner ornaments */
+    .corner {
+      position: absolute;
+      font-size: 0.85rem;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+    .corner.tl { top: 28px;  left: 18px; }
+    .corner.tr { top: 28px;  right: 18px; }
+    .corner.bl { bottom: 28px; left: 18px; }
+    .corner.br { bottom: 28px; right: 18px; }
+
+    /* ── ENVELOPE ── */
+    .envelope {
+      position: relative;
+      width: 380px;
+      height: 240px;
+      background: linear-gradient(160deg, #7a2035, var(--burgundy) 60%, #4a0f1c);
+      border-radius: 4px 4px 14px 14px;
+      box-shadow:
+        0 28px 70px var(--shadow),
+        0 4px 18px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(201,151,58,0.35);
+      flex-shrink: 0;
+      z-index: 6;
+    }
+
+    /* Gold trim border */
+    .envelope-border {
+      position: absolute;
+      inset: 3px;
+      border-radius: 3px 3px 12px 12px;
+      border: 1px solid rgba(201,151,58,0.45);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Side fold triangles */
+    .envelope::before,
+    .envelope::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 0; height: 0;
+      z-index: 3;
+    }
+    .envelope::before {
+      left: 0;
+      border-style: solid;
+      border-width: 120px 0 0 190px;
+      border-color: transparent transparent transparent #3a0c17;
+    }
+    .envelope::after {
+      right: 0;
+      border-style: solid;
+      border-width: 120px 190px 0 0;
+      border-color: transparent #3a0c17 transparent transparent;
+    }
+
+    /* Bottom center triangle */
+    .bottom-fold {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 135px;
+      background: #330b14;
+      clip-path: polygon(0 100%, 50% 0%, 100% 100%);
+      z-index: 2;
+    }
+
+    /* Wax seal */
+    .seal {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.6rem;
+      z-index: 5;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+      transition: opacity 0.35s ease;
+    }
+
+    /* ── FLAP ── */
+    .flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 168px;
+      background: linear-gradient(175deg, #8a2540, var(--deep-red));
+      clip-path: polygon(0 0, 100% 0, 50% 63%);
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
+      box-shadow: 0 4px 22px rgba(0,0,0,0.35);
+    }
+
+    .flap-icon {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.9rem;
+      transition: opacity 0.3s;
+      z-index: 11;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+    }
+
+    /* ── OPEN STATE ── */
+    .scene.open .flap {
+      transform: rotateX(-180deg);
+    }
+    .scene.open .flap-icon {
+      opacity: 0;
+    }
+    .scene.open .seal {
+      opacity: 0;
+    }
+    /* Card rises fully above the envelope */
+    .scene.open .card {
+      transform: translateX(-50%) translateY(-30px);
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 12;
+    }
+
+    /* ── HINT ── */
+    .hint {
+      position: absolute;
+      bottom: -42px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      color: var(--gold-light);
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+      font-style: italic;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 0.35; }
+      50%      { opacity: 1; }
+    }
+    .scene.open .hint { opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <script>
+    const emojis = ['✨','💛','🌟','🌹','💫','⭐','🔆'];
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.classList.add('petal');
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = (Math.random() * 100) + 'vw';
+      el.style.fontSize = (0.7 + Math.random() * 1.1) + 'rem';
+      el.style.animationDuration = (7 + Math.random() * 10) + 's';
+      el.style.animationDelay   = (Math.random() * 9) + 's';
+      document.body.appendChild(el);
+    }
+  </script>
+
+  <div class="scene" id="scene" onclick="this.classList.toggle('open')">
+
+    <!-- Card (fully above envelope when opened) -->
+    <div class="card">
+      <span class="corner tl">✦</span>
+      <span class="corner tr">✦</span>
+      <span class="corner bl">✦</span>
+      <span class="corner br">✦</span>
+
+      <div class="card-heart">❤️</div>
+      <h1>Happy Valentine's Day!</h1>
+      <div class="divider"></div>
+      <p>
+        May this day bring you<br/>
+        joy beyond measure,<br/>
+        and love beyond words.
+      </p>
+      <div class="divider"></div>
+      <p class="signature">With Best Wishes &amp; Love ✨</p>
+    </div>
+
+    <!-- Envelope -->
+    <div class="envelope">
+      <div class="envelope-border"></div>
+      <div class="bottom-fold"></div>
+      <div class="seal">💛</div>
+      <div class="flap">
+        <div class="flap-icon">💌</div>
+      </div>
+    </div>
+
+    <div class="hint">✦ &nbsp; Click to open &nbsp; ✦</div>
+  </div>
+
+</body>
+</html>
